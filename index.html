@@ -14,6 +14,9 @@
   <p id="status"></p>
 
   <script>
+    const SUPABASE_URL = 'https://xkkhhskrwtbdvuhbpvdn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_hkJauQqdVcCCZugxmTeyLQ_27Dnbgrr';
+
     document.getElementById('email-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email-input').value;
@@ -21,9 +24,13 @@
       status.textContent = 'Sending...';
 
       try {
-        const res = await fetch('/api/send-email', {
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'apikey': SUPABASE_ANON_KEY,
+          },
           body: JSON.stringify({ email }),
         });
         const data = await res.json();
