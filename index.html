@@ -6,5 +6,32 @@
 </head>
 <body>
   <p>Test</p>
+
+  <form id="email-form">
+    <input type="email" id="email-input" placeholder="you@example.com" required>
+    <button type="submit">Send test email</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('email-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email-input').value;
+      const status = document.getElementById('status');
+      status.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json();
+        status.textContent = res.ok ? 'Email sent!' : `Error: ${data.error}`;
+      } catch (err) {
+        status.textContent = 'Error: could not reach server';
+      }
+    });
+  </script>
 </body>
 </html>
